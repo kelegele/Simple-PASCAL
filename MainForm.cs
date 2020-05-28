@@ -56,8 +56,9 @@ namespace Simple_PASCAL
             if (richTextBoxMain.Text.Length == 0)
             {
                 //空代码 提示输入
-                MainInfoForm lexicalInfo = new MainInfoForm();
-                lexicalInfo.ShowDialog();
+                MainInfoForm info = new MainInfoForm();
+                info.labelInfo.Text = "输入代码不能为空";
+                info.ShowDialog();
             }
             else
             {
@@ -70,8 +71,11 @@ namespace Simple_PASCAL
                 {
                     resultOfLexical = (List<Pascal>)result[Lexical.VALUE];
 
-                    MainInfoForm lexicalInfo = new MainInfoForm();
-                    lexicalInfo.ShowDialog();
+                    MainInfoForm info = new MainInfoForm();
+                    info.labelInfo.Text = "词法分析成功，结果在文件：";
+                    info.linkLabel.Text = Lexical.outputPath;
+                    info.linkLabel.Visible = true;
+                    info.ShowDialog();
                 }
                 else
                 {

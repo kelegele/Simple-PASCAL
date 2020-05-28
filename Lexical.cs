@@ -34,7 +34,7 @@ namespace Simple_PASCAL
         /// <summary>
         /// 词法分析结果输出文件
         /// </summary>
-        private static string outputPath = Directory.GetCurrentDirectory() + "\\lexical.output";
+        public static string outputPath = Directory.GetCurrentDirectory() + "\\lexical.output";
 
         /// <summary>
         /// result map key

@@ -33,10 +33,10 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.buttonCompiling = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonSaveCode = new System.Windows.Forms.Button();
             this.linkLabelFileName = new System.Windows.Forms.LinkLabel();
             this.labelFileNameInfo = new System.Windows.Forms.Label();
             this.buttonOpenFile = new System.Windows.Forms.Button();
-            this.buttonSaveCode = new System.Windows.Forms.Button();
             this.saveCodeFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -45,18 +45,20 @@
             // 
             this.labelInfo.AutoSize = true;
             this.labelInfo.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelInfo.Location = new System.Drawing.Point(12, 9);
+            this.labelInfo.Location = new System.Drawing.Point(16, 11);
+            this.labelInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelInfo.Name = "labelInfo";
-            this.labelInfo.Size = new System.Drawing.Size(198, 21);
+            this.labelInfo.Size = new System.Drawing.Size(247, 27);
             this.labelInfo.TabIndex = 0;
             this.labelInfo.Text = "请输入一段PASCAL源码：";
             // 
             // richTextBoxMain
             // 
             this.richTextBoxMain.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBoxMain.Location = new System.Drawing.Point(18, 37);
+            this.richTextBoxMain.Location = new System.Drawing.Point(24, 46);
+            this.richTextBoxMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.richTextBoxMain.Name = "richTextBoxMain";
-            this.richTextBoxMain.Size = new System.Drawing.Size(561, 415);
+            this.richTextBoxMain.Size = new System.Drawing.Size(775, 529);
             this.richTextBoxMain.TabIndex = 1;
             this.richTextBoxMain.Text = "";
             // 
@@ -67,9 +69,10 @@
             // buttonCompiling
             // 
             this.buttonCompiling.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonCompiling.Location = new System.Drawing.Point(6, 369);
+            this.buttonCompiling.Location = new System.Drawing.Point(38, 461);
+            this.buttonCompiling.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonCompiling.Name = "buttonCompiling";
-            this.buttonCompiling.Size = new System.Drawing.Size(110, 40);
+            this.buttonCompiling.Size = new System.Drawing.Size(147, 50);
             this.buttonCompiling.TabIndex = 3;
             this.buttonCompiling.Text = "开始编译";
             this.buttonCompiling.UseVisualStyleBackColor = true;
@@ -77,24 +80,39 @@
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.buttonSaveCode);
             this.panel1.Controls.Add(this.linkLabelFileName);
             this.panel1.Controls.Add(this.buttonCompiling);
             this.panel1.Controls.Add(this.labelFileNameInfo);
             this.panel1.Controls.Add(this.buttonOpenFile);
-            this.panel1.Location = new System.Drawing.Point(612, 37);
+            this.panel1.Location = new System.Drawing.Point(830, 46);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(121, 412);
+            this.panel1.Size = new System.Drawing.Size(219, 529);
             this.panel1.TabIndex = 6;
+            // 
+            // buttonSaveCode
+            // 
+            this.buttonSaveCode.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.buttonSaveCode.Location = new System.Drawing.Point(38, 389);
+            this.buttonSaveCode.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonSaveCode.Name = "buttonSaveCode";
+            this.buttonSaveCode.Size = new System.Drawing.Size(147, 50);
+            this.buttonSaveCode.TabIndex = 9;
+            this.buttonSaveCode.Text = "另存为";
+            this.buttonSaveCode.UseVisualStyleBackColor = true;
+            this.buttonSaveCode.Click += new System.EventHandler(this.buttonSaveCode_Click);
             // 
             // linkLabelFileName
             // 
             this.linkLabelFileName.AutoSize = true;
             this.linkLabelFileName.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelFileName.Location = new System.Drawing.Point(3, 87);
-            this.linkLabelFileName.MaximumSize = new System.Drawing.Size(120, 0);
+            this.linkLabelFileName.Location = new System.Drawing.Point(37, 117);
+            this.linkLabelFileName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.linkLabelFileName.MaximumSize = new System.Drawing.Size(160, 0);
             this.linkLabelFileName.Name = "linkLabelFileName";
-            this.linkLabelFileName.Size = new System.Drawing.Size(28, 14);
+            this.linkLabelFileName.Size = new System.Drawing.Size(32, 18);
             this.linkLabelFileName.TabIndex = 8;
             this.linkLabelFileName.TabStop = true;
             this.linkLabelFileName.Text = "...";
@@ -105,45 +123,38 @@
             // 
             this.labelFileNameInfo.AutoSize = true;
             this.labelFileNameInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelFileNameInfo.Location = new System.Drawing.Point(1, 58);
+            this.labelFileNameInfo.Location = new System.Drawing.Point(34, 80);
+            this.labelFileNameInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelFileNameInfo.Name = "labelFileNameInfo";
-            this.labelFileNameInfo.Size = new System.Drawing.Size(44, 17);
+            this.labelFileNameInfo.Size = new System.Drawing.Size(54, 20);
             this.labelFileNameInfo.TabIndex = 7;
             this.labelFileNameInfo.Text = "文件：";
             // 
             // buttonOpenFile
             // 
             this.buttonOpenFile.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonOpenFile.Location = new System.Drawing.Point(3, 3);
+            this.buttonOpenFile.Location = new System.Drawing.Point(34, 4);
+            this.buttonOpenFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonOpenFile.Name = "buttonOpenFile";
-            this.buttonOpenFile.Size = new System.Drawing.Size(110, 40);
+            this.buttonOpenFile.Size = new System.Drawing.Size(147, 50);
             this.buttonOpenFile.TabIndex = 6;
             this.buttonOpenFile.Text = "从文件打开";
             this.buttonOpenFile.UseVisualStyleBackColor = true;
             this.buttonOpenFile.Click += new System.EventHandler(this.buttonOpenFile_Click);
             // 
-            // buttonSaveCode
-            // 
-            this.buttonSaveCode.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonSaveCode.Location = new System.Drawing.Point(6, 311);
-            this.buttonSaveCode.Name = "buttonSaveCode";
-            this.buttonSaveCode.Size = new System.Drawing.Size(110, 40);
-            this.buttonSaveCode.TabIndex = 9;
-            this.buttonSaveCode.Text = "另存为";
-            this.buttonSaveCode.UseVisualStyleBackColor = true;
-            this.buttonSaveCode.Click += new System.EventHandler(this.buttonSaveCode_Click);
-            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 461);
+            this.ClientSize = new System.Drawing.Size(1082, 603);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.richTextBoxMain);
             this.Controls.Add(this.labelInfo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Simple-PASCAL";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

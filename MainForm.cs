@@ -52,22 +52,33 @@ namespace Simple_PASCAL
         string saveFilePath = Directory.GetCurrentDirectory() + "\\code.src";
         private void buttonCompiling_Click(object sender, EventArgs e)
         {
-            saveCode(saveFilePath);
-            Lexical lexical = new Lexical(saveFilePath);
-            Hashtable result = lexical.Run();
-
-            List<Pascal> resultOfLexical;
-            if ((int)result[Lexical.KEY] == Lexical.SUCCESS)
+            //文本框为空
+            if (richTextBoxMain.Text.Length == 0)
             {
-                resultOfLexical = (List<Pascal>)result[Lexical.VALUE];
+                //空代码 提示输入
+                MainInfoForm lexicalInfo = new MainInfoForm();
+                lexicalInfo.ShowDialog();
             }
             else
             {
-                resultOfLexical = null;
+                saveCode(saveFilePath);
+                Lexical lexical = new Lexical(saveFilePath);
+                Hashtable result = lexical.Run();
 
+                List<Pascal> resultOfLexical;
+                if ((int)result[Lexical.KEY] == Lexical.SUCCESS)
+                {
+                    resultOfLexical = (List<Pascal>)result[Lexical.VALUE];
+
+                    MainInfoForm lexicalInfo = new MainInfoForm();
+                    lexicalInfo.ShowDialog();
+                }
+                else
+                {
+                    resultOfLexical = null;
+
+                }
             }
-
-
         }
 
         private void buttonSaveCode_Click(object sender, EventArgs e)
@@ -79,30 +90,24 @@ namespace Simple_PASCAL
             {
                 userPath = saveCodeFileDialog.FileName.ToString(); //获得文件路径
             }
-                saveCode(userPath);
+            saveCode(userPath);
         }
 
         private void saveCode(string saveFilePath)
         {
             string srcCode = richTextBoxMain.Text;
 
-            if (srcCode.Length == 0)
-            {
-                //空代码
-            }
-            else
-            {
-                //创建 FileStream 类的实例
-                FileStream fileStream = new FileStream(saveFilePath, FileMode.Create);
-                //将字符串转换为字节数组
-                byte[] bytes = Encoding.UTF8.GetBytes(srcCode);
-                //向文件中写入字节数组
-                fileStream.Write(bytes, 0, bytes.Length);
-                //刷新缓冲区
-                fileStream.Flush();
-                //关闭流
-                fileStream.Close();
-            }
+            //创建 FileStream 类的实例
+            FileStream fileStream = new FileStream(saveFilePath, FileMode.Create);
+            //将字符串转换为字节数组
+            byte[] bytes = Encoding.UTF8.GetBytes(srcCode);
+            //向文件中写入字节数组
+            fileStream.Write(bytes, 0, bytes.Length);
+            //刷新缓冲区
+            fileStream.Flush();
+            //关闭流
+            fileStream.Close();
+
         }
     }
 }

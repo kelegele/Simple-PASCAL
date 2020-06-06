@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.labelInfo = new System.Windows.Forms.Label();
             this.richTextBoxMain = new System.Windows.Forms.RichTextBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -280,8 +281,7 @@
             this.labelParserResult.AutoSize = true;
             this.labelParserResult.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelParserResult.ForeColor = System.Drawing.Color.Red;
-            this.labelParserResult.Location = new System.Drawing.Point(15, 20);
-            this.labelParserResult.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelParserResult.Location = new System.Drawing.Point(16, 24);
             this.labelParserResult.MaximumSize = new System.Drawing.Size(160, 0);
             this.labelParserResult.Name = "labelParserResult";
             this.labelParserResult.Size = new System.Drawing.Size(40, 22);
@@ -299,6 +299,7 @@
             this.Controls.Add(this.richTextBoxMain);
             this.Controls.Add(this.labelInfo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "MainForm";

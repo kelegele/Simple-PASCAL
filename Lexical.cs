@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Collections;
 
 
@@ -19,7 +18,7 @@ namespace Simple_PASCAL
         /// <summary>
         /// 单分界符
         /// </summary>
-        public static char[] singleword = { '+', '-', '*', ';', ',' ,'=' };
+        public static char[] singleword = { '+', '*', ';', ',' ,'=','(',')' };
 
         /// <summary>
         /// 双分界符首字符 
@@ -35,32 +34,6 @@ namespace Simple_PASCAL
         /// 词法分析结果输出文件
         /// </summary>
         public static string outputPath = Directory.GetCurrentDirectory() + "\\lexical.output";
-
-        /// <summary>
-        /// result map key
-        /// </summary>
-        public const string KEY = "key";
-
-        /// <summary>
-        /// result map msg
-        /// </summary>
-        public const string MSG = "msg";
-
-        /// <summary>
-        /// result map value
-        /// </summary>
-        public const string VALUE = "value";
-
-        /// <summary>
-        /// KEY SUCCESS
-        /// </summary>
-        public const int SUCCESS = 1;
-
-        /// <summary>
-        /// KEY FAILURE
-        /// </summary>
-        public const int FAILURE = -1;
-
 
         public Lexical(string filePath)
         {
@@ -89,7 +62,7 @@ namespace Simple_PASCAL
             if (!File.Exists(codeFilePath))
             {
                 //文件不存在！
-                result.Add(MSG, "文件不存在");
+                result.Add(Message.MSG, "文件不存在");
             }
             //读入源码文件流
             FileStream srcCodeFileStream = new FileStream(codeFilePath, FileMode.Open, FileAccess.Read);
@@ -136,7 +109,7 @@ namespace Simple_PASCAL
                 }
 
                 //空格 和 制表符
-                while (codeChars[index] == ' ' | codeChars[index] == '\t')
+                while (codeChars[index] == ' ' || codeChars[index] == '\t')
                 {
                     col++;
                     index++;
@@ -163,17 +136,11 @@ namespace Simple_PASCAL
                         info = "error：变量存在非法字符";
                     }
 
-                    //数字开头 FDE错误
-                    //if (char.IsDigit(codeChars[index]))
-                    //{
-                    //    pascalWords.Type = Pascal.FDE;
-                    //}
-
                     index++;//下一个char
                     col++;
 
                     //字母或数字字符且不包含空格、逗号、分号的标点符号
-                    while (char.IsLetterOrDigit(codeChars[index]) && codeChars[index] != ' '
+                    while (index < length && char.IsLetterOrDigit(codeChars[index]) && codeChars[index] != ' '
                         && codeChars[index] != '\t' && codeChars[index] != ','
                         && codeChars[index] != ';')
                     {
@@ -199,7 +166,7 @@ namespace Simple_PASCAL
                     if (pascalWords.Type != Pascal.ISE)
                     {
                         //合法标识符成立
-                        pascalWords.Type = Pascal.ID;
+                        pascalWords.Type = Type.ID;
 
                         //判断保留字
                         for (int m = 1; m <= 10; m++)
@@ -221,6 +188,7 @@ namespace Simple_PASCAL
                         info = "error：标识符长度不应大于8";
                     }
                 }
+
                 //数字
                 else if (char.IsDigit(codeChars[index]))
                 {
@@ -228,11 +196,10 @@ namespace Simple_PASCAL
                     int k = 0;
                     pascalWords = new Pascal();
 
-                    pascalWords.Text[k++] = codeChars[index];
+                    pascalWords.Text[k++] = codeChars[index++];
                     pascalWords.X = row;
                     pascalWords.Y = col++;
 
-                    index++;
                     //是否为字母或数字
                     while (char.IsLetterOrDigit(codeChars[index]))
                     {
@@ -264,11 +231,12 @@ namespace Simple_PASCAL
                         }
                         else
                         {
-                            pascalWords.Type = Pascal.INT;
+                            pascalWords.Type = Type.INT;
                             pascalWords.Num = sum;
                         }
                     }
                 }
+
                 //单分界符
                 else if (singleword.Contains(codeChars[index]))
                 {
@@ -276,37 +244,49 @@ namespace Simple_PASCAL
                     switch (codeChars[index])
                     {
                         case '+':
-                            pascalWords.Type = Pascal.ADD;
+                            pascalWords.Type = Type.ADD;
                             pascalWords.Text[0] = codeChars[index++];
                             pascalWords.X = row;
                             pascalWords.Y = col++;
                             break;
-                        case '-':
-                            pascalWords.Type = Pascal.SUB;
-                            pascalWords.Text[0] = codeChars[index++];
-                            pascalWords.X = row;
-                            pascalWords.Y = col++;
-                            break;
+                        //case '-':
+                        //    pascalWords.Type = Type.SUB;
+                        //    pascalWords.Text[0] = codeChars[index++];
+                        //    pascalWords.X = row;
+                        //    pascalWords.Y = col++;
+                        //    break;
                         case '*':
-                            pascalWords.Type = Pascal.MUL;
+                            pascalWords.Type = Type.MUL;
                             pascalWords.Text[0] = codeChars[index++];
                             pascalWords.X = row;
                             pascalWords.Y = col++;
                             break;
                         case ';':
-                            pascalWords.Type = Pascal.SEM;
+                            pascalWords.Type = Type.SEM;
                             pascalWords.Text[0] = codeChars[index++];
                             pascalWords.X = row;
                             pascalWords.Y = col++;
                             break;
                         case ',':
-                            pascalWords.Type = Pascal.COMMA;
+                            pascalWords.Type = Type.COMMA;
                             pascalWords.Text[0] = codeChars[index++];
                             pascalWords.X = row;
                             pascalWords.Y = col++;
                             break;
                         case '=':
-                            pascalWords.Type = Pascal.EQ;
+                            pascalWords.Type = Type.EQ;
+                            pascalWords.Text[0] = codeChars[index++];
+                            pascalWords.X = row;
+                            pascalWords.Y = col++;
+                            break;
+                        case '(':
+                            pascalWords.Type = Type.LP;
+                            pascalWords.Text[0] = codeChars[index++];
+                            pascalWords.X = row;
+                            pascalWords.Y = col++;
+                            break;
+                        case ')':
+                            pascalWords.Type = Type.RP;
                             pascalWords.Text[0] = codeChars[index++];
                             pascalWords.X = row;
                             pascalWords.Y = col++;
@@ -316,12 +296,14 @@ namespace Simple_PASCAL
                             break;
                     }
                 }
+
                 //双分界符首字符
                 else if (doubleword.Contains(codeChars[index]))
                 {
 
                     //下一个字符
                     char next;
+
                     if(index + 1 < length)
                     {
                         next = codeChars[index + 1];
@@ -338,33 +320,41 @@ namespace Simple_PASCAL
                             {
                                 pascalWords.Text[0] = codeChars[index++];
                                 pascalWords.Text[1] = next;
-                                pascalWords.Type = Pascal.GE;
+                                pascalWords.Type = Type.GE;
                                 pascalWords.X = row;
                                 pascalWords.Y = col++;
                             }
                             else // >
                             {
                                 pascalWords.Text[0] = codeChars[index];
-                                pascalWords.Type = Pascal.GT;
+                                pascalWords.Type = Type.GT;
+                                pascalWords.X = row;
+                                pascalWords.Y = col;
                             }
-                            index++;
-                            col++;
                             break;
                         case '<':
                             if (next == '=') // <=
                             {
                                 pascalWords.Text[0] = codeChars[index++];
                                 pascalWords.Text[1] = next;
-                                pascalWords.Type = Pascal.LE;
+                                pascalWords.Type = Type.LE;
+                                pascalWords.X = row;
+                                pascalWords.Y = col++;
+                            }
+                            else if (next == '>') //<>
+                            {
+                                pascalWords.Text[0] = codeChars[index++];
+                                pascalWords.Text[1] = next;
+                                pascalWords.Type = Type.NE;
                                 pascalWords.X = row;
                                 pascalWords.Y = col++;
                             }
                             else // <
                             {
-                                pascalWords.Text[0] = codeChars[index++];
-                                pascalWords.Type = Pascal.LT;
+                                pascalWords.Text[0] = codeChars[index];
+                                pascalWords.Type = Type.LT;
                                 pascalWords.X = row;
-                                pascalWords.Y = col++;
+                                pascalWords.Y = col;
                             }
                             break;
                         case ':':
@@ -372,37 +362,40 @@ namespace Simple_PASCAL
                             {
                                 pascalWords.Text[0] = codeChars[index++];
                                 pascalWords.Text[1] = next;
-                                pascalWords.Type = Pascal.ASS;
+                                pascalWords.Type = Type.ASS;
                                 pascalWords.X = row;
                                 pascalWords.Y = col++;
                             }
                             else // :
                             {
-                                pascalWords.Text[0] = codeChars[index++];
-                                pascalWords.Type = Pascal.SEM;
+                                pascalWords.Text[0] = codeChars[index];
+                                pascalWords.Type = Type.SEM;
                                 pascalWords.X = row;
-                                pascalWords.Y = col++;
+                                pascalWords.Y = col;
                             }
                             break;
                         case '/':
                             if (next == '/') // 单行注释
                             {
                                 remark = true;
-                                index++;
-                                col++;
-                                while(index < length && codeChars[index] != '\n')
+
+                                do
                                 {
                                     index++;
                                     col++;
-                                }
+                                } while (index < length && codeChars[index] != '\n');
+
+                                index--;
+                                col--;
+
                             }
                             else if( next == '*') //多行注释开始符
                             {
                                 remark = true;
+                                bool doneRemark = false; //多行注释成功标记
+
                                 index += 2;// index->*.next
                                 col += 2;
-
-                                bool doneRemark = false; //多行注释成功标记
 
                                 while (index < length)
                                 {
@@ -423,8 +416,8 @@ namespace Simple_PASCAL
                                             if (codeChars[index] == '*' && next == '/')//多行结束
                                             {
                                                 doneRemark = true;
-                                                index += 2;
-                                                col += 2;
+                                                index ++;
+                                                col ++;
                                                 break;
                                             }
                                         }
@@ -455,37 +448,50 @@ namespace Simple_PASCAL
                             }
                             else // /
                             {
+                                //pascalWords.Type = Type.DIV;
                                 pascalWords.Text[0] = codeChars[index++];
-                                pascalWords.Type = Pascal.DIV;
                                 pascalWords.X = row;
                                 pascalWords.Y = col++;
+                                pascalWords.Type = Pascal.ISE;
+                                info = "error：未匹配字符";
                             }
                             break;
                         default:
-                            Console.WriteLine("未知错误");
+                            pascalWords.Text[0] = codeChars[index++];
+                            pascalWords.X = row;
+                            pascalWords.Y = col++;
+                            pascalWords.Type = Pascal.ISE;
+                            info = "error：未匹配字符";
                             break;
                     }
-
-
+                    index++;
+                    col++;
                 }
+
                 //结束符 # 处理
                 else if ('#' == codeChars[index])
                 {
-                    pascalWords.Type = Pascal.FINISH;
+                    pascalWords.Type = Type.FINISH;
                     pascalWords.Text[0] = codeChars[index];
                     pascalWords.X = row;
                     pascalWords.Y = col;
 
                     index = length;
                 }
-                //非法字符串
+
+                else if (codeChars[index] == ' ' || codeChars[index] == '\t' || codeChars[index] == '\n')
+                {
+                    continue;
+                }
+
+                //未匹配字符
                 else
                 {
                     pascalWords.Text[0] = codeChars[index++];
                     pascalWords.X = row;
                     pascalWords.Y = col++;
                     pascalWords.Type = Pascal.ISE;
-                    info = "error：变量存在非法字符";
+                    info = "error：未匹配字符";
                 }
 
                 if (!remark)
@@ -512,14 +518,14 @@ namespace Simple_PASCAL
 
             if(pascals.Count > 0)
             {
-                result.Add(KEY, SUCCESS);
-                result.Add(MSG, "词法分析完成");
-                result.Add(VALUE, pascals);
+                result.Add(Message.KEY, Message.SUCCESS);
+                result.Add(Message.MSG, "词法分析完成");
+                result.Add(Message.VALUE, pascals);
             }
             else
             {
-                result.Add(KEY, FAILURE);
-                result.Add(MSG, "词法分析失败！请检查");
+                result.Add(Message.KEY, Message.FAILURE);
+                result.Add(Message.MSG, "词法分析失败！请检查");
             }
 
 
@@ -537,6 +543,7 @@ namespace Simple_PASCAL
         private void OutputLog(Pascal pascal, FileStream outFileStream)
         {
             string str = null;
+
             if (info != null)
             {
                 str = info;
@@ -544,115 +551,123 @@ namespace Simple_PASCAL
 
             switch (pascal.Type)
             {
-                case Pascal.ID:
+                case Type.ID:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ID,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[{pascal.Type},{info}] {str}\n";
                     break;
-                case Pascal.FINISH:
+                case Type.FINISH:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ 结束符 ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.GE:
+                case Type.GE:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ >= ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.GT:
+                case Type.GT:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ > ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.IF:
+                case Type.IF:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ if ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.INT:
-                    info = $"({pascal.X},{pascal.Y})：[ 整数 ,{pascal.Num}] \n";
+                case Type.INT:
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{pascal.Num}] \n";
                     break;
-                case Pascal.INTEGER:
+                case Type.INTEGER:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ 整数类型 ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.LE:
+                case Type.LE:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ <= ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.LT:
+                case Type.LT:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ < ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.MUL:
+                case Type.MUL:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ * ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.NE:
+                case Type.NE:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ <> ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.SEM:
+                case Type.SEM:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ ; ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.SUB:
+                //case Type.SUB:
+                //    info = pascal.TextToStr(pascal.Text);
+                //    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                //    break;
+                case Type.THEN:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ - ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.THEN:
+                case Type.VAR:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[then,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.VAR:
+                case Type.WHILE:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[var,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.WHILE:
+                case Type.ADD:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[while,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.ADD:
+                case Type.ASS:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ + ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.ASS:
+                case Type.BEGIN:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ := ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.BEGIN:
+                case Type.COL:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[begin,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.COL:
+                case Type.COMMA:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ : ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.COMMA:
+                //case Type.DIV:
+                //    info = pascal.TextToStr(pascal.Text);
+                //    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                //    break;
+                case Type.DO:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ , ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.DIV:
+                case Type.ELSE:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ /,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.DO:
+                case Type.END:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[do,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
-                case Pascal.ELSE:
+                case Type.EQ:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[else,{info}] {str}\n";
-                    break;
-                case Pascal.END:
-                    info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[end,{info}] {str}\n";
-                    break;
-                case Pascal.EQ:
-                    info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ =,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Pascal.IR:
                     info = $"({pascal.X},{pascal.Y})：{str} \n";
                     break;
+                case Type.LP:
+                    info = pascal.TextToStr(pascal.Text);
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    break;
+                case Type.RP:
+                    info = pascal.TextToStr(pascal.Text);
+                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    break;
                 default:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：未识别标识 {info} ，{str} \n";
+                    info = $"({pascal.X},{pascal.Y})：未识别字符类型 {info} ，{str} \n";
                     break;
             }
 

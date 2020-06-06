@@ -8,6 +8,8 @@ namespace Simple_PASCAL
 {
     class Pascal
     {
+        //语法分析标志 对应GOTO/ACTION
+        private int id;
         //类别码
         private int type;
         //行列
@@ -23,10 +25,12 @@ namespace Simple_PASCAL
         public int Y { get => y; set => y = value; }
         public char[] Text { get => text; set => text = value; }
         public int Num { get => num; set => num = value; }
+        public int Id { get => id; set => id = value; }
 
         //构造方法
         public Pascal(int type, int x, int y, int num)
         {
+            Id = -1;
             Type = type;
             X = x;
             Y = y;
@@ -35,6 +39,7 @@ namespace Simple_PASCAL
 
         public Pascal(int type, int x, int y, char[] text)
         {
+            Id = -1;
             Type = type;
             X = x;
             Y = y;
@@ -43,6 +48,7 @@ namespace Simple_PASCAL
 
         public Pascal()
         {
+            Id = -1;
             Type = INIT;
             X = 0;
             Y = 0;
@@ -99,32 +105,5 @@ namespace Simple_PASCAL
         public const int IR = -5;
 
         /*单词类别*/
-        public const int ID = 101;
-        public const int INT = 201;
-        public const int FINISH = 301;
-        public const int BEGIN = 302;
-        public const int END = 303;
-        public const int IF = 304;
-        public const int THEN = 305;
-        public const int ELSE = 306;
-        public const int WHILE = 307;
-        public const int DO = 308;
-        public const int INTEGER = 309;
-        public const int VAR = 310;
-        public const int COL = 401;
-        public const int COMMA = 402;
-        public const int SEM = 403;
-        public const int LT = 501;
-        public const int LE = 502;
-        public const int EQ = 503;
-        public const int NE = 504;
-        public const int GT = 505;
-        public const int GE = 506;
-        public const int ADD = 507;
-        public const int SUB = 508;
-        public const int MUL = 509;
-        public const int DIV = 510;
-        public const int ASS = 511;
-
     }
 }

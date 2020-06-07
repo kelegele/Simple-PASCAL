@@ -32,13 +32,21 @@ namespace Simple_PASCAL
         /// <summary>
         /// 符号栈
         /// </summary>
-        private Stack<Pascal> SymStack;
+        //private Stack<Pascal> SymStack;
+
+        /// <summary>
+        /// 语义栈
+        /// </summary>
+        private Stack<Pascal> SemanticStack;
+
+        /// <summary>
+        /// 语音动作实例
+        /// </summary>
+        private Semantic SemanticAct;
 
         public Parser(List<Pascal> symList)
         {
             SymList = symList;
-            StatusStack = new Stack<int>();
-            SymStack = new Stack<Pascal>();
             Init();
         }
 
@@ -47,13 +55,24 @@ namespace Simple_PASCAL
         /// </summary>
         private void Init()
         {
+            
+            //SymStack = new Stack<Pascal>();
+            
+            //状态栈初始化
+            StatusStack = new Stack<int>();
             StatusStack.Push(0);
 
+            //语义栈初始化
+            SemanticStack = new Stack<Pascal>();
             Pascal stackTop = new Pascal();
-            stackTop.Text[0] = '#';
-            SymStack.Push(stackTop);
+            stackTop.Num = -1;
+            stackTop.Text[0] = '-';
+            SemanticStack.Push(stackTop);
 
-            foreach(Pascal pascal in SymList)
+            //语义分析初始化
+            SemanticAct = new Semantic(SemanticStack);
+
+            foreach (Pascal pascal in SymList)
             {
                 pascal.Id = (int)Type.TypeToId[pascal.Type];
             }
@@ -90,6 +109,8 @@ namespace Simple_PASCAL
                 else if (ACTION[TopStat, InpSym] > 0)//移进
                 {
                     StatusStack.Push(ACTION[TopStat, InpSym]);
+                    SemanticStack.Push(SymList[index]);
+
                     TopStat = StatusStack.Peek();
                     index++;
                     InpSym = SymList[index].Id;
@@ -98,8 +119,8 @@ namespace Simple_PASCAL
                 else if (ACTION[TopStat, InpSym] < 0)//归约
                 {
                     int reduceIndex = ACTION[TopStat, InpSym];
-                    /*语义动作*/
-                    //Act();
+                    //语义动作
+                    Act(-reduceIndex);
 
                     int sum = (int)Table.SumProdRight[ACTION[TopStat, InpSym]];
                     while(sum > 0)
@@ -135,6 +156,7 @@ namespace Simple_PASCAL
                 result.Add(Message.MSG, $"语法 ERROR, 行:{er.X},列:{er.Y}");
             }
 
+            SemanticAct.outFileStreamClose();
 
             return result;
         }
@@ -142,9 +164,9 @@ namespace Simple_PASCAL
         /// <summary>
         /// 语义动作
         /// </summary>
-        private void Act()
+        private void Act(int index)
         {
-
+            SemanticAct.startSemanticAct(index);
         }
     }
 }

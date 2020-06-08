@@ -21,6 +21,29 @@ namespace Simple_PASCAL
         private int NXQ;
 
         /// <summary>
+        /// 符号表 {string name, 文法符号 }
+        /// </summary>
+        private Hashtable SymTable;
+
+        /// <summary>
+        /// 变量与算数表达式文法符号
+        /// </summary>
+        struct EV
+        {
+            public int PLACE;
+        }
+
+        /// <summary>
+        /// 符号表变量编号 大于0
+        /// </summary>
+        private int P_INDEX;
+
+        /// <summary>
+        /// 符号表临时变量编号 小于0
+        /// </summary>
+        private int T_INDEX;
+
+        /// <summary>
         /// 操作表 0 J, 1 J> ,2 <,3 J=,4 +,5 *,6 := 
         /// </summary>
         private static string[] OPs = {"J", "J>","J<","J=","+","*",":="};
@@ -43,12 +66,97 @@ namespace Simple_PASCAL
         public Semantic(Stack<Pascal> stack)
         {
             NXQ = 1;
+            P_INDEX = 1;
+            T_INDEX = -1;
+            SymTable = new Hashtable();
             Stack = stack;
 
             //创建 输出词法分析结果流
             outFileStream = new FileStream(outputPath,
                 FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
         }
+
+        /// <summary>
+        /// 产生四元式
+        /// </summary>
+        /// <param name="op">操作符号编号</param>
+        /// <param name="arg1">参数1</param>
+        /// <param name="arg2">参数2</param>
+        /// <param name="result">结果</param>
+        /// <returns></returns>
+        private int GEN(int op, string arg1, string arg2, string result)
+        {
+            string info = $"{NXQ}:({OPs[op]},{arg1},{arg2},{result}) \n";
+
+            byte[] bytes = Encoding.UTF8.GetBytes(info);
+
+            //向文件中写入字节数组
+            outFileStream.Position = outFileStream.Length;//指针移到最后
+            outFileStream.Write(bytes, 0, bytes.Length);
+
+            return NXQ++;
+        }
+
+        /// <summary>
+        /// 产生临时变量
+        /// </summary>
+        /// <returns></returns>
+        private int NewTemp()
+        {
+            EV eV;
+            eV.PLACE = T_INDEX;
+            SymTable.Add($"T{T_INDEX}",eV);
+
+            return T_INDEX--;
+        }
+
+        /// <summary>
+        /// 查符号表
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>有 返回 PLACE 无 返回0</returns>
+        private int LookUp(string name)
+        {
+            if (SymTable.ContainsKey(name))
+            {
+                return ((EV)SymTable[name]).PLACE;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// 以name 登记符号表
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private int Enter(string name)
+        {
+            EV eV;
+            eV.PLACE = P_INDEX;
+            SymTable.Add(name,eV);
+
+            return P_INDEX++;
+        }
+
+        /// <summary>
+        /// 查、填符号表
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private int Entry(string name)
+        {
+            int i = LookUp(name);
+            if (i != 0)
+            {
+                return i;
+            }
+            else
+            {
+                return Enter(name);
+            }
+        }
+
 
         public void outFileStreamClose()
         {
@@ -117,25 +225,14 @@ namespace Simple_PASCAL
             }
         }
 
-        private int GEN(int op,string arg1, string arg2, string result)
-        {
-            string info = $"{NXQ}:({OPs[op]},{arg1},{arg2},{result}) \n";
-
-            byte[] bytes = Encoding.UTF8.GetBytes(info);
-
-            //向文件中写入字节数组
-            outFileStream.Position = outFileStream.Length;//指针移到最后
-            outFileStream.Write(bytes, 0, bytes.Length);
-
-            return NXQ++;
-        }
-
         /// <summary>
         /// <变量>→<标识符>
         /// </summary>
         private void Act_15()
         {
-            
+            Pascal pascal = Stack.Peek();
+            string name = pascal.TextToStr(pascal.Text);
+            Entry(name);
         }
 
         /// <summary>
@@ -144,6 +241,8 @@ namespace Simple_PASCAL
         private void Act_14()
         {
             Pascal pascal = Stack.Peek();
+            string name = pascal.TextToStr(pascal.Text);
+            Entry(name);
         }
 
         /// <summary>

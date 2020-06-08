@@ -172,7 +172,7 @@ namespace Simple_PASCAL
         {
             foreach (string[] o in SemtArr)
             {
-                string info = $"{o[0]}:({o[1]},{o[2]},{o[3]},{o[4]}) \n";
+                string info = $"{o[0]}:\t({o[1]},{o[2]},{o[3]},{o[4]}) \n";
 
                 byte[] bytes = Encoding.UTF8.GetBytes(info);
 

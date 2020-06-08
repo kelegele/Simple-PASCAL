@@ -553,121 +553,121 @@ namespace Simple_PASCAL
             {
                 case Type.ID:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[{pascal.Type},{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[{pascal.Type},{info}] {str}\n";
                     break;
                 case Type.FINISH:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.GE:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.GT:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.IF:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.INT:
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{pascal.Num}] \n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{pascal.Num}] \n";
                     break;
                 case Type.INTEGER:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.LE:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.LT:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.MUL:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.NE:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.SEM:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 //case Type.SUB:
                 //    info = pascal.TextToStr(pascal.Text);
-                //    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                //    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                 //    break;
                 case Type.THEN:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.VAR:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.WHILE:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.ADD:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.ASS:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.BEGIN:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.COL:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.COMMA:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 //case Type.DIV:
                 //    info = pascal.TextToStr(pascal.Text);
-                //    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                //    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                 //    break;
                 case Type.DO:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.ELSE:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.END:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.EQ:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Pascal.IR:
-                    info = $"({pascal.X},{pascal.Y})：{str} \n";
+                    info = $"({pascal.X},{pascal.Y}):\t{str} \n";
                     break;
                 case Type.LP:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 case Type.RP:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：[ {pascal.Type } ,{info}] {str}\n";
+                    info = $"({pascal.X},{pascal.Y}):\t[ {pascal.Type } ,{info}] {str}\n";
                     break;
                 default:
                     info = pascal.TextToStr(pascal.Text);
-                    info = $"({pascal.X},{pascal.Y})：未识别字符类型 {info} ，{str} \n";
+                    info = $"({pascal.X},{pascal.Y}):\t未识别字符类型 {info} ，{str} \n";
                     break;
             }
 

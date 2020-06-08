@@ -19,6 +19,14 @@ namespace Simple_PASCAL
         private char[] text;
         private int num;
 
+
+        //真假出口
+        private int tc;
+        private int fc;
+
+        private int next;
+
+
         //set get
         public int Type { get => type; set => type = value; }
         public int X { get => x; set => x = value; }
@@ -26,6 +34,10 @@ namespace Simple_PASCAL
         public char[] Text { get => text; set => text = value; }
         public int Num { get => num; set => num = value; }
         public int Id { get => id; set => id = value; }
+        public int TC { get => tc; set => tc = value; }
+        public int FC { get => fc; set => fc = value; }
+        public int Next { get => next; set => next = value; }
+
 
         //构造方法
         public Pascal(int type, int x, int y, int num)

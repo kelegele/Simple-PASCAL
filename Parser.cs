@@ -32,7 +32,7 @@ namespace Simple_PASCAL
         /// <summary>
         /// 符号栈
         /// </summary>
-        //private Stack<Pascal> SymStack;
+        //private stack<Pascal> SymStack;
 
         /// <summary>
         /// 语义栈
@@ -56,7 +56,7 @@ namespace Simple_PASCAL
         private void Init()
         {
             
-            //SymStack = new Stack<Pascal>();
+            //SymStack = new stack<Pascal>();
             
             //状态栈初始化
             StatusStack = new Stack<int>();
@@ -109,7 +109,21 @@ namespace Simple_PASCAL
                 else if (ACTION[TopStat, InpSym] > 0)//移进
                 {
                     StatusStack.Push(ACTION[TopStat, InpSym]);
+                    int type = SymList[index].Type;
+                    if (type == Type.THEN || type == Type.DO)
+                    {
+                        SymList[index].TC = SemanticAct.NewLabel();
+                        SymList[index].FC = SemanticAct.NewLabel();
+                    }
+
+                    if (type == Type.ELSE )
+                    {
+                        SymList[index].Next = SemanticAct.NewLabel();
+
+                    }
+
                     SemanticStack.Push(SymList[index]);
+
 
                     TopStat = StatusStack.Peek();
                     index++;
@@ -156,6 +170,7 @@ namespace Simple_PASCAL
                 result.Add(Message.MSG, $"语法 ERROR, 行:{er.X},列:{er.Y}");
             }
 
+            SemanticAct.Print();
             SemanticAct.outFileStreamClose();
 
             return result;

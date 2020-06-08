@@ -13,7 +13,7 @@ namespace Simple_PASCAL
         /// <summary>
         /// 语义栈引用语法分析语义栈
         /// </summary>
-        private Stack<Pascal> Stack;
+        private Stack<Pascal> stack;
 
         /// <summary>
         /// 四元式标识
@@ -21,17 +21,9 @@ namespace Simple_PASCAL
         private int NXQ;
 
         /// <summary>
-        /// 符号表 {string name, 文法符号 }
+        /// 符号表 {int id, int num }
         /// </summary>
         private Hashtable SymTable;
-
-        /// <summary>
-        /// 变量与算数表达式文法符号
-        /// </summary>
-        struct EV
-        {
-            public int PLACE;
-        }
 
         /// <summary>
         /// 符号表变量编号 大于0
@@ -44,14 +36,17 @@ namespace Simple_PASCAL
         private int T_INDEX;
 
         /// <summary>
-        /// 操作表 0 J, 1 J> ,2 <,3 J=,4 +,5 *,6 := 
+        /// 操作表 "0 J", "1 JT", "2 JF",  "3 <",  "4 >",  "5 =", "6 <=", "7 >=", "8 <>", "9 +", "10 *", "11 :="
         /// </summary>
-        private static string[] OPs = {"J", "J>","J<","J=","+","*",":="};
+        private static string[] OPs = { "J", "JT", "JF", "<", ">", "=", "<=", ">=", "<>", "+", "*", ":=" };
+
+
+        private List<string[]> SemtArr;
 
         /// <summary>
         /// 空字符串
         /// </summary>
-        private static string NULLStr = " - ";
+        private static string NULLStr = " -- ";
 
         /// <summary>
         /// 语义分析四元式结果输出文件
@@ -66,10 +61,11 @@ namespace Simple_PASCAL
         public Semantic(Stack<Pascal> stack)
         {
             NXQ = 1;
-            P_INDEX = 1;
-            T_INDEX = -1;
+            P_INDEX = 0;
+            T_INDEX = 0;
             SymTable = new Hashtable();
-            Stack = stack;
+            SemtArr = new List<string[]>();
+            this.stack = stack;
 
             //创建 输出词法分析结果流
             outFileStream = new FileStream(outputPath,
@@ -77,7 +73,7 @@ namespace Simple_PASCAL
         }
 
         /// <summary>
-        /// 产生四元式
+        /// 产生四元式 0 J, 1 J> ,2 J<,3 J=,4 +,5 *,6 := 
         /// </summary>
         /// <param name="op">操作符号编号</param>
         /// <param name="arg1">参数1</param>
@@ -86,14 +82,17 @@ namespace Simple_PASCAL
         /// <returns></returns>
         private int GEN(int op, string arg1, string arg2, string result)
         {
-            string info = $"{NXQ}:({OPs[op]},{arg1},{arg2},{result}) \n";
+            string[] info = {NXQ.ToString(), OPs[op],arg1,arg2,result };
+            // $"{NXQ}:({OPs[op]},{arg1},{arg2},{result}) \n";
+            SemtArr.Add(info);
 
-            byte[] bytes = Encoding.UTF8.GetBytes(info);
+            return NXQ++;
+        }
 
-            //向文件中写入字节数组
-            outFileStream.Position = outFileStream.Length;//指针移到最后
-            outFileStream.Write(bytes, 0, bytes.Length);
-
+        public int NewLabel()
+        {
+            string[] info = { NXQ.ToString(), null, null, null, null };
+            SemtArr.Add(info);
             return NXQ++;
         }
 
@@ -101,50 +100,51 @@ namespace Simple_PASCAL
         /// 产生临时变量
         /// </summary>
         /// <returns></returns>
-        private int NewTemp()
+        private int NewTemp(int num )
         {
-            EV eV;
-            eV.PLACE = T_INDEX;
-            SymTable.Add($"T{T_INDEX}",eV);
+            T_INDEX--;
 
-            return T_INDEX--;
+            SymTable.Add(T_INDEX,num);
+
+            return T_INDEX;
         }
 
         /// <summary>
         /// 查符号表
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns>有 返回 PLACE 无 返回0</returns>
+        /// <param id="id"></param>
+        /// <returns>有 返回 id 无 返回0</returns>
         private int LookUp(string name)
         {
+            int index = 0;
             if (SymTable.ContainsKey(name))
             {
-                return ((EV)SymTable[name]).PLACE;
+                index = (int)SymTable[name];
+                return index;
             }
 
             return 0;
         }
 
         /// <summary>
-        /// 以name 登记符号表
+        /// 登记符号表
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        private int Enter(string name)
+        private int Enter(Pascal o)
         {
-            EV eV;
-            eV.PLACE = P_INDEX;
-            SymTable.Add(name,eV);
+            P_INDEX++;
+            SymTable.Add(P_INDEX, o);
 
-            return P_INDEX++;
+            return P_INDEX;
         }
 
         /// <summary>
-        /// 查、填符号表
+        /// 查、添符号表
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        private int Entry(string name)
+        private int Entry(string name,Pascal pascal)
         {
             int i = LookUp(name);
             if (i != 0)
@@ -153,7 +153,9 @@ namespace Simple_PASCAL
             }
             else
             {
-                return Enter(name);
+                int index = Enter(pascal);
+                SymTable.Add(name,index);
+                return index;
             }
         }
 
@@ -164,6 +166,20 @@ namespace Simple_PASCAL
             outFileStream.Flush();
             //关闭输出结果流
             outFileStream.Close();
+        }
+
+        public void Print()
+        {
+            foreach (string[] o in SemtArr)
+            {
+                string info = $"{o[0]}:({o[1]},{o[2]},{o[3]},{o[4]}) \n";
+
+                byte[] bytes = Encoding.UTF8.GetBytes(info);
+
+                //向文件中写入字节数组
+                outFileStream.Position = outFileStream.Length;//指针移到最后
+                outFileStream.Write(bytes, 0, bytes.Length);
+            }
         }
 
         /// <summary>
@@ -226,23 +242,34 @@ namespace Simple_PASCAL
         }
 
         /// <summary>
-        /// <变量>→<标识符>
+        /// <变量>→<标识符> L→k
         /// </summary>
         private void Act_15()
         {
-            Pascal pascal = Stack.Peek();
-            string name = pascal.TextToStr(pascal.Text);
-            Entry(name);
+            Pascal t = stack.Pop();
+
+            int findIndex = Entry(t.TextToStr(t.Text),t);
+            Pascal r = (Pascal)SymTable[findIndex];
+            Pascal l = new Pascal();
+
+            l.Text = r.Text;
+            l.Num = r.Num;
+            
+            stack.Push(l);
         }
 
         /// <summary>
-        /// <因式>→<数字>
+        /// <因式>→<数字> K->i
         /// </summary>
         private void Act_14()
         {
-            Pascal pascal = Stack.Peek();
-            string name = pascal.TextToStr(pascal.Text);
-            Entry(name);
+            Pascal r = stack.Pop();
+            Pascal l = new Pascal();
+
+            l.Text = r.Text;
+            l.Num = r.Num;
+
+            stack.Push(l);
         }
 
         /// <summary>
@@ -250,6 +277,16 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_13()
         {
+            stack.Pop();
+            Pascal r = stack.Pop();
+            stack.Pop();
+
+            Pascal l = new Pascal();
+            l.Text = r.Text;
+            l.Num = r.Num;
+
+            stack.Push(l);
+
         }
 
         /// <summary>
@@ -257,6 +294,13 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_12()
         {
+            Pascal r = stack.Pop();
+            Pascal l = new Pascal();
+
+            l.Text = r.Text;
+            l.Num = r.Num;
+
+            stack.Push(l);
         }
 
         /// <summary>
@@ -264,6 +308,18 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_11()
         {
+            Pascal r3 = stack.Pop();
+            stack.Pop();
+            Pascal r1 = stack.Pop();
+
+            Pascal l = new Pascal();
+            l.Num = r1.Num * r3.Num;
+
+            l.Text = $"T{NewTemp(l.Num)}".ToCharArray();
+
+            GEN(10, r1.TextToStr(r1.Text), r3.TextToStr(r3.Text), l.TextToStr(l.Text));
+
+            stack.Push(l);
         }
 
         /// <summary>
@@ -271,6 +327,13 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_10()
         {
+            Pascal r = stack.Pop();
+            Pascal l = new Pascal();
+
+            l.Text = r.Text;
+            l.Num = r.Num;
+
+            stack.Push(l);
         }
 
         /// <summary>
@@ -278,6 +341,19 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_9()
         {
+            Pascal r3 = stack.Pop();
+            stack.Pop();
+            Pascal r1 = stack.Pop();
+
+            Pascal l = new Pascal();
+            l.Num = r1.Num + r3.Num;
+           
+            l.Text = $"T{NewTemp(l.Num)}".ToCharArray();
+            
+
+            GEN(9, r1.TextToStr(r1.Text), r3.TextToStr(r3.Text), l.TextToStr(l.Text));
+
+            stack.Push(l);
         }
 
         /// <summary>
@@ -285,6 +361,13 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_8()
         {
+            Pascal r = stack.Pop();
+            Pascal l = new Pascal();
+
+            l.Text = r.Text;
+            l.Num = r.Num;
+
+            stack.Push(l);
         }
 
         /// <summary>
@@ -292,6 +375,50 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_7()
         {
+            Pascal r3 = stack.Pop();
+            Pascal r2 = stack.Pop();
+            Pascal r1 = stack.Pop();
+            Pascal l = new Pascal();
+
+            int ret = -1;
+            int c = -1;
+            switch (r2.Type)
+            {
+                case Type.LT:
+                    ret = (r1.Num < r3.Num) ? 1 : 0;
+                    c = 3;
+                    break;
+                case Type.LE:
+                    ret = (r1.Num <= r3.Num) ? 1 : 0;
+                    c = 6;
+                    break;
+                case Type.EQ:
+                    ret = (r1.Num == r3.Num) ? 1 : 0;
+                    c = 5;
+                    break;
+                case Type.NE:
+                    ret = (r1.Num != r3.Num) ? 1 : 0;
+                    c = 8;
+                    break;
+                case Type.GT:
+                    ret = (r1.Num > r3.Num) ? 1 : 0;
+                    c = 4;
+                    break;
+                case Type.GE:
+                    ret = (r1.Num >= r3.Num) ? 1 : 0;
+                    c = 7;
+                    break;
+                default:
+                    break;
+            }
+
+            l.Num = ret;
+
+            //真假临时变量名字
+            l.Text = $"T{NewTemp(l.Num)}".ToCharArray();
+            int j = GEN(c, r1.TextToStr(r1.Text), r3.TextToStr(r3.Text), l.TextToStr(l.Text));
+            l.Next = j;
+            stack.Push(l);
         }
 
         /// <summary>
@@ -299,6 +426,13 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_6()
         {
+            stack.Pop();
+            Pascal r2 = stack.Pop();
+            stack.Pop();
+
+            Pascal l = new Pascal();
+            l.Next = r2.Next;
+            stack.Push(l);
         }
 
         /// <summary>
@@ -306,6 +440,39 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_5()
         {
+            Pascal r4 = stack.Pop();
+            Pascal r3 = stack.Pop();
+            Pascal r2 = stack.Pop();
+            Pascal r1 = stack.Pop();
+
+            GEN(0, NULLStr, NULLStr, r2.Next.ToString());
+
+            for (int j = 0; j < SemtArr.Count; j++)
+            {
+                string[] o = SemtArr[j];
+                if (int.Parse(o[0]) == r3.TC)
+                {
+                    SemtArr[j][1] = OPs[1];
+                    SemtArr[j][2] = r2.TextToStr(r2.Text);
+                    SemtArr[j][3] = NULLStr;
+                    SemtArr[j][4] = (r3.TC+2).ToString();
+                }
+
+                if (int.Parse(o[0]) == r3.FC)
+                {
+                    SemtArr[j][1] = OPs[2];
+                    SemtArr[j][2] = r2.TextToStr(r2.Text);
+                    SemtArr[j][3] = NULLStr;
+                    SemtArr[j][4] = NXQ.ToString();
+                }
+            }
+
+
+            r3.TC = r4.Next;
+            r3.FC = NXQ;
+
+            Pascal l = new Pascal();
+            stack.Push(l);
         }
 
         /// <summary>
@@ -313,6 +480,46 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_4()
         {
+            Pascal r6 = stack.Pop();
+            Pascal r5 = stack.Pop();
+            Pascal r4 = stack.Pop();
+            Pascal r3 = stack.Pop();
+            Pascal r2 = stack.Pop();
+            Pascal r1 = stack.Pop();
+
+            for (int j = 0;j < SemtArr.Count;j++)
+            {
+                string[] o = SemtArr[j];
+                if (int.Parse(o[0]) == r3.TC)
+                {
+                    SemtArr[j][1] = OPs[1];
+                    SemtArr[j][2] = r2.TextToStr(r2.Text);
+                    SemtArr[j][3] = NULLStr;
+                    SemtArr[j][4] = (r3.TC+2).ToString();
+                }
+
+                if (int.Parse(o[0]) == r3.FC)
+                {
+                    SemtArr[j][1] = OPs[2];
+                    SemtArr[j][2] = r2.TextToStr(r2.Text);
+                    SemtArr[j][3] = NULLStr;
+                    SemtArr[j][4] = (r5.Next+1).ToString();
+                }
+
+                if(int.Parse(o[0]) == r5.Next)
+                {
+                    SemtArr[j][1] = OPs[0];
+                    SemtArr[j][2] = NULLStr;
+                    SemtArr[j][3] = NULLStr;
+                    SemtArr[j][4] = NXQ.ToString();
+                }
+            }
+
+            r3.TC = r4.Next;
+            r3.FC = r6.Next;
+
+            Pascal l = new Pascal();
+            stack.Push(l);
         }
 
         /// <summary>
@@ -320,6 +527,23 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_3()
         {
+            Pascal r3 = stack.Pop();
+            stack.Pop();
+            Pascal r1 = stack.Pop();
+            Pascal l = new Pascal();
+
+            r1.Num = r3.Num;
+            int index = Entry(r1.TextToStr(r1.Text),r1);
+            r1 = (Pascal)SymTable[index];
+            r1.Num = r3.Num;
+
+            int j = GEN(11,r3.TextToStr(r3.Text),NULLStr,r1.TextToStr(r1.Text));
+
+            l.Text = r1.Text;
+            l.Num = r1.Num;
+            l.Next = j;
+
+            stack.Push(l);
 
         }
 
@@ -328,6 +552,13 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_2()
         {
+            stack.Pop();
+            stack.Pop();
+            Pascal r1 = stack.Pop();
+
+            Pascal l = new Pascal();
+            l.Next = r1.Next;
+            stack.Push(l);
         }
 
         /// <summary>
@@ -335,6 +566,12 @@ namespace Simple_PASCAL
         /// </summary>
         private void Act_1()
         {
+            Pascal r1 = stack.Pop();
+
+            Pascal l = new Pascal();
+            l.Next = r1.Next;
+
+            stack.Push(l);
         }
 
     }

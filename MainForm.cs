@@ -200,8 +200,9 @@ namespace Simple_PASCAL
                 info.linkLabel.Visible = true;
                 info.ShowDialog();
 
-                linkLabelLexResult.Visible = true;
+                
                 linkLabelLexResult.Text = Lexical.outputPath;
+                linkLabelLexResult.Visible = true;
             }
             else
             {
@@ -232,6 +233,9 @@ namespace Simple_PASCAL
                 MainInfoForm info = new MainInfoForm();
                 info.labelInfo.Text = (string)result[Message.MSG];
                 info.ShowDialog();
+
+                linkLabelSemantic.Text = Semantic.outputPath;
+                linkLabelSemantic.Visible = true;
             }
             else //error
             {
@@ -246,6 +250,11 @@ namespace Simple_PASCAL
             labelParserResult.Visible = true;
 
             return ret;
+        }
+
+        private void linkLabelSemantic_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            openFile(linkLabelSemantic, Semantic.outputPath);
         }
     }
 }

@@ -36,11 +36,12 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.linkLabel3 = new System.Windows.Forms.LinkLabel();
+            this.linkLabelSemantic = new System.Windows.Forms.LinkLabel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.labelFileNameInfo = new System.Windows.Forms.Label();
             this.linkLabelFileName = new System.Windows.Forms.LinkLabel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.labelParserResult = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonSaveCode = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -49,7 +50,6 @@
             this.buttonOpenFile = new System.Windows.Forms.Button();
             this.saveCodeFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.labelLineCol = new System.Windows.Forms.Label();
-            this.labelParserResult = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -119,7 +119,7 @@
             // panel5
             // 
             this.panel5.Controls.Add(this.label2);
-            this.panel5.Controls.Add(this.linkLabel3);
+            this.panel5.Controls.Add(this.linkLabelSemantic);
             this.panel5.Location = new System.Drawing.Point(16, 375);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(200, 100);
@@ -136,19 +136,20 @@
             this.label2.TabIndex = 14;
             this.label2.Text = "语义分析结果：";
             // 
-            // linkLabel3
+            // linkLabelSemantic
             // 
-            this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel3.Location = new System.Drawing.Point(16, 17);
-            this.linkLabel3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.linkLabel3.MaximumSize = new System.Drawing.Size(160, 0);
-            this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.Size = new System.Drawing.Size(32, 18);
-            this.linkLabel3.TabIndex = 15;
-            this.linkLabel3.TabStop = true;
-            this.linkLabel3.Text = "...";
-            this.linkLabel3.Visible = false;
+            this.linkLabelSemantic.AutoSize = true;
+            this.linkLabelSemantic.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelSemantic.Location = new System.Drawing.Point(16, 17);
+            this.linkLabelSemantic.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.linkLabelSemantic.MaximumSize = new System.Drawing.Size(160, 0);
+            this.linkLabelSemantic.Name = "linkLabelSemantic";
+            this.linkLabelSemantic.Size = new System.Drawing.Size(32, 18);
+            this.linkLabelSemantic.TabIndex = 15;
+            this.linkLabelSemantic.TabStop = true;
+            this.linkLabelSemantic.Text = "...";
+            this.linkLabelSemantic.Visible = false;
+            this.linkLabelSemantic.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelSemantic_LinkClicked);
             // 
             // panel2
             // 
@@ -193,6 +194,19 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(200, 100);
             this.panel4.TabIndex = 18;
+            // 
+            // labelParserResult
+            // 
+            this.labelParserResult.AutoSize = true;
+            this.labelParserResult.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelParserResult.ForeColor = System.Drawing.Color.Red;
+            this.labelParserResult.Location = new System.Drawing.Point(16, 24);
+            this.labelParserResult.MaximumSize = new System.Drawing.Size(160, 0);
+            this.labelParserResult.Name = "labelParserResult";
+            this.labelParserResult.Size = new System.Drawing.Size(40, 22);
+            this.labelParserResult.TabIndex = 13;
+            this.labelParserResult.Text = "...";
+            this.labelParserResult.Visible = false;
             // 
             // label1
             // 
@@ -276,19 +290,6 @@
             this.labelLineCol.Text = "line-col";
             this.labelLineCol.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // labelParserResult
-            // 
-            this.labelParserResult.AutoSize = true;
-            this.labelParserResult.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelParserResult.ForeColor = System.Drawing.Color.Red;
-            this.labelParserResult.Location = new System.Drawing.Point(16, 24);
-            this.labelParserResult.MaximumSize = new System.Drawing.Size(160, 0);
-            this.labelParserResult.Name = "labelParserResult";
-            this.labelParserResult.Size = new System.Drawing.Size(40, 22);
-            this.labelParserResult.TabIndex = 13;
-            this.labelParserResult.Text = "...";
-            this.labelParserResult.Visible = false;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -333,7 +334,7 @@
         private System.Windows.Forms.SaveFileDialog saveCodeFileDialog;
         private System.Windows.Forms.LinkLabel linkLabelLexResult;
         private System.Windows.Forms.Label labelLex;
-        private System.Windows.Forms.LinkLabel linkLabel3;
+        private System.Windows.Forms.LinkLabel linkLabelSemantic;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelLineCol;

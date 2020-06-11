@@ -47,6 +47,10 @@ namespace Simple_PASCAL
             openFileDialog.ShowDialog();
             srcFilePath = openFileDialog.FileName;
 
+            linkLabelLexResult.Visible = false;
+            linkLabelSemantic.Visible = false;
+            labelParserResult.Visible = false;
+
             if (File.Exists(srcFilePath))
             {
                 richTextBoxMain.Text = File.ReadAllText(srcFilePath);
@@ -184,25 +188,43 @@ namespace Simple_PASCAL
 
                 wordList = (List<Pascal>)result[Message.VALUE];
 
-                foreach (Pascal pascal in wordList)
+                if (wordList[wordList.Count-1].Type != Type.FINISH )
                 {
-                    if(pascal.Type < 0)
+                    ret = false;
+                    MainInfoForm info = new MainInfoForm();
+                    info.labelInfo.Text = "词法分析完成，未识别合法结束符！部分词法分析结果下：";
+                    info.linkLabel.Text = Lexical.outputPath;
+                    info.linkLabel.Visible = true;
+                    info.ShowDialog();
+
+                    linkLabelLexResult.Text = Lexical.outputPath;
+                    linkLabelLexResult.Visible = true;
+                }
+                else
+                {
+                    foreach (Pascal pascal in wordList)
                     {
-                        ret = false;
-                        break;
+                        if (pascal.Type < 0)
+                        {
+                            ret = false;
+                            break;
+                        }
                     }
+
+                    MainInfoForm info = new MainInfoForm();
+                    info.labelInfo.Text = ret ? "词法分析完成，结果在文件："
+                        : "词法分析完成，存在词法错误，在文件中查看：";
+                    info.linkLabel.Text = Lexical.outputPath;
+                    info.linkLabel.Visible = true;
+                    info.ShowDialog();
+
+
+                    linkLabelLexResult.Text = Lexical.outputPath;
+                    linkLabelLexResult.Visible = true;
                 }
 
-                MainInfoForm info = new MainInfoForm();
-                info.labelInfo.Text = ret?"词法分析完成，结果在文件："
-                    :"词法分析完成，存在词法错误，在文件中查看：";
-                info.linkLabel.Text = Lexical.outputPath;
-                info.linkLabel.Visible = true;
-                info.ShowDialog();
 
                 
-                linkLabelLexResult.Text = Lexical.outputPath;
-                linkLabelLexResult.Visible = true;
             }
             else
             {

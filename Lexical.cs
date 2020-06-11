@@ -429,6 +429,7 @@ namespace Simple_PASCAL
                                             pascalWords.X = row;
                                             pascalWords.Y = col++;
                                             index++;
+                                            remark = false;
                                             break;
                                         }
                                     }
@@ -444,6 +445,7 @@ namespace Simple_PASCAL
                                     pascalWords.Type = Pascal.IR;
                                     pascalWords.X = row;
                                     pascalWords.Y = col;
+                                    remark = false;
                                 }
                             }
                             else // /
